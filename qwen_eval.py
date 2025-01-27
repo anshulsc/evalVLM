@@ -19,14 +19,9 @@ from qwen_vl_utils import process_vision_info
 import torch
 from PIL import Image
 
-
-from utils import find_jsonl_file, benchmark_data, SYSTEMS_INSTRUCTIONS_2
-
-
-
+from utils import find_jsonl_file, benchmark_data, SYSTEMS_INSTRUCTIONS_2, Response
 
 def load_qwen_model(model_path, device="cuda:1", quantization=False, quant_bit=4):
-    
     
     if quantization:
         
@@ -81,10 +76,6 @@ def load_qwen_model(model_path, device="cuda:1", quantization=False, quant_bit=4
     processor = AutoProcessor.from_pretrained(model_path)
     return model, processor
 
-
-class Response(BaseModel):
-        data : List[List[str]]
-
 def prepare_qwen_input(data_row, images_dir, processor):
     
     messages = [
@@ -116,7 +107,7 @@ def prepare_qwen_input(data_row, images_dir, processor):
         }
     )
     
-    # Preparation for inference
+    
     text = processor.apply_chat_template(
         messages, tokenize=False, add_generation_prompt=True
     )
@@ -213,7 +204,7 @@ def main():
     parser.add_argument("--model-path", default="Qwen/Qwen2-VL-7B-Instruct")
     parser.add_argument("--device", default="cuda:3", help="Device to run the model on, e.g., 'cuda:0', 'cpu'.")
     parser.add_argument("--quantization", default=False, help="Quantization flag")
-    parser.add_argument("--quant_bit", default=4, choices=[4, 8], help="Quantization bit",)
+    parser.add_argument("--quant_bit", default=4, choices=[4,8], help="Quantization bit", type=int)
     
     args = parser.parse_args()
 

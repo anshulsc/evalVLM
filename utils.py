@@ -1,6 +1,11 @@
 import json
 import os 
+from pydantic import BaseModel
+from typing import List, Optional
 
+
+class Response(BaseModel):
+        data : List[List[str]]
 
 SYSTEMS_INSTRUCTIONS = """
 You are an intelligent assistant capable of understanding and reasoning about multi-tabular data. You will be presented with one or more tables containing information on a specific topic. 
